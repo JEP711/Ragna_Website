@@ -36,17 +36,17 @@
 		$(document).ready(function() 
 		{
 			$("#warning, #tagline, #berserkInstruct, #monkInstruct, #wizInstruct, #genInfo, #playInstruct, #sideMenu").hide();
-			/*$("#lowMenu").slideUp("fast");*/
+			$("#lowMenu").slideUp("fast");
 			$("#lowMenu").delay(12000).slideDown(2000);
 			$("a:contains(How)").one("click", function() { $("#titleScreen").fadeOut(4000, function(){ 
-				/*$("#warning").fadeIn(3000, function(){ 
+				$("#warning").fadeIn(3000, function(){ 
 					$("#tagline").delay(2250).slideDown(5000, function(){ 
-						$("#warning").delay(2000).fadeOut("slow", function(){*/
+						$("#warning").delay(2000).fadeOut("slow", function(){
 							$("#tagline").css({"animation": "taglineMove 6s 1", "animation-fill-mode": "forwards"}).delay(6010).hide(100);
 							$("#instructions").css({"animation": "toTop 8s 1", "animation-fill-mode": "forwards"})
-						/*}); 
+						}); 
 					}); 
-				});*/ 
+				}); 
 			})}); 
 			$("#berserkClickInstruct").click(function(){
 				$("#wizClickInstruct, #monkClickInstruct").off("click");
