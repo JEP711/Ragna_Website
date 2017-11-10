@@ -5,12 +5,9 @@
 	<link rel="stylesheet" href="style.css"></link>
 	<style type="text/css">
 		html, body { width: 100%; height: 100%; margin: 0px; border: 0; overflow: hidden; }
-		#lowMenu { position: fixed; bottom: 0; width: 100%; background-color: #262626; z-index: 1; } 
-		#sideMenu { position: fixed; left: 0; height: 100%; width: 5%; background-color: #262626; z-index: 0;
+		#lowMenu { position: fixed; bottom: 0; width: 100%; background-color: #262626; z-index: 3; } 
+		#sideMenu { position: fixed; left: 0; height: 35%; width: 5%; background-color: #262626; z-index: 1;
 					margin-left-right: 10px; }
-		.sideText { padding-left: 25px; padding-right: 25px; font-size: 3em; font-family: Impact, Charcoal, sans-serif;
-					padding-bottom: 20px; padding-top: 20px; color: black; text-decoration: none; display: block;
-					margin-bottom: 40px; margin-top: 40px; }
 		.nav { display: inline-block; text-decoration: none; padding: 1em 2em; color: black;
 				font-size: 1.75em; font-family: Impact, Charcoal, sans-serif; letter-spacing: 4px;}
 		.nav:hover { color: #737373; 
@@ -28,22 +25,26 @@
 		.icon { cursor: pointer; position: relative; }
 		.icon:hover { animation: shadowPop 2s 1; animation-fill-mode: forwards; }
 		.icon:active { animation: clickIn 1s 1;  }
-		
+		#steelAni { animation: selectFlux 10s infinite; }
+		.selectButton { font-size: 3em; margin: 15px 50px; border: 0; cursor: pointer; padding: 25px 100px; 
+						border-radius: 15px; outline: none; }
+		.selectButton:hover { animation: shadowPop 2s 1; animation-fill-mode: forwards; }
+		.selectButton:active { animation: clickIn 1s 1; }
 	</style>
 	
 	<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 	<script>
 		$(document).ready(function() 
 		{
-			$("#warning, #tagline, #berserkInstruct, #monkInstruct, #wizInstruct, #genInfo, #playInstruct, #sideMenu").hide();
+			$("#battle, #warning, #tagline, #berserkInstruct, #monkInstruct, #wizInstruct, #genInfo, #playInstruct, #sideMenu, #characterSelect").hide();
 			$("#lowMenu").slideUp("fast");
 			$("#lowMenu").delay(12000).slideDown(2000);
-			$("a:contains(How)").one("click", function() { $("#titleScreen").fadeOut(4000, function(){ 
+			$("a:contains(How to Play)").one("click", function() { $("#intro").fadeOut(4000, function(){ 
 				$("#warning").fadeIn(3000, function(){ 
 					$("#tagline").delay(2250).slideDown(5000, function(){ 
 						$("#warning").delay(2000).fadeOut("slow", function(){
 							$("#tagline").css({"animation": "taglineMove 6s 1", "animation-fill-mode": "forwards"}).delay(6010).hide(100);
-							$("#instructions").css({"animation": "toTop 8s 1", "animation-fill-mode": "forwards"})
+							$("#instructions").css({"animation": "toTop 6s 1", "animation-fill-mode": "forwards"})
 						}); 
 					}); 
 				}); 
@@ -187,11 +188,36 @@
 				}); 
 			});
 			$("#playInstruct").click(function(){
-				$("#howPlay").fadeOut(5000);
-				$("#titleScreen").show();
-				
+				$("#lowMenu").slideUp("slow", function(){
+					$("#howPlay").fadeOut(2000);
+					$("#characterSelect").fadeIn(8000);
+					$("#sideMenu").slideDown("slideDown");
+				});
 			});
-		});
+			$("a:contains(Play Game)").click(function(){
+				$("#lowMenu").slideUp("slow", function(){
+					$("#intro, #howPlay").fadeOut(5000, function(){
+						$("#characterSelect").fadeIn(5000);
+						$("#sideMenu").slideDown("slow");
+					});
+				});
+			});
+			$("#bsrkButton").click(function(){
+				$("#characterSelect").fadeOut("slow", function(){
+					$("#battle").fadeIn(8000);
+				});
+			});
+			$("#monkButton").click(function(){
+				$("#characterSelect").fadeOut("slow", function(){
+					$("#battle").fadeIn(8000);
+				});
+			});
+			$("#wizButton").click(function(){
+				$("#characterSelect").fadeOut("slow", function(){
+					$("#battle").fadeIn(8000);
+				});
+			});
+		});	
 	</script>
 </head>
 <body style="background-color: black; color: white; font-size: 100%;">
@@ -203,20 +229,17 @@
 	</div>
 	
 	<div id="sideMenu">
-		<a style="text-decoration: none;" href="index.html">
-			<div id="titleIngame" class="sideText">
-			T
-			</div>
+		<a href="index.html" style="display: block; margin-top: 40px; margin-bottom: 50px;">
+			<img src="img/home.png" style="height: 50px; width: 50px; margin-left: 12px; margin-right: 10px;">
 		</a>
-		<a class="sideText" style="cursor: pointer;">H</a>
-		<a class="sideText" href="https://github.com/WebDevBootCampFall2017/jpolk_ragnarok">G</a>
+		<a href="https://github.com/WebDevBootCampFall2017/jpolk_ragnarok" style="display: block; margin-bottom: 25px;">
+			<img src="img/github.png" style="height: 50px; width: 50px; margin-left: 12px; margin-right: 10px;">
+		</a>
 	</div>
 	
-	<section id="titleScreen">
-		<canvas id="intro" style="position: absolute; left: 0px; top: 0px; z-index: -4;"></canvas>
-		<script src="introLine.js"></script>
-		<script	src="titleAni.js"></script>
-	</section>
+	<canvas id="intro" style="position: absolute; left: 0px; top: 0px; z-index: 2;"></canvas>
+	<script src="introLine.js"></script>
+	<script	src="titleAni.js"></script>
 	
 	<section id= "howPlay">
 		<div id="tag" style="z-index: -3;">
@@ -238,15 +261,15 @@
 			<div id="cSelect">
 				<figure id="berserkClickInstruct" class="icon">
 					<img src="img/BerserkerIcon.png" id="bIcon" style="width: 350px; height: 300px;">
-					<figcaption class="simple" style="color: red; font-size: 1.9em;">BERSERKER</figcaption>
+					<figcaption class="simple" style="color: #930101; font-size: 1.9em;">BERSERKER</figcaption>
 				</figure>
 				<figure id="monkClickInstruct" class="icon">
 					<img src="img/MonkIcon.png" id="mIcon" style="width: 350px; height: 300px;">
-					<figcaption class="simple" style="color: green; font-size: 1.9em;">MONK</figcaption>
+					<figcaption class="simple" style="color: #199101; font-size: 1.9em;">MONK</figcaption>
 				</figure>
 				<figure id="wizClickInstruct" class="icon">
 					<img src="img/WizardIcon.png" id="wIcon" style="width: 350px; height: 300px;">
-					<figcaption class="simple" style="color: blue; font-size: 1.9em;">WIZARD</figcaption>
+					<figcaption class="simple" style="color: #013192; font-size: 1.9em;">WIZARD</figcaption>
 				</figure>
 			</div>
 			<p id="clickInstruct" class="read instructFont" style="text-align: center; margin-top: 30px;">
@@ -255,41 +278,41 @@
 		</div>
 		<div id="berserkInstruct" class="read instructFont characterInstruct">
 			<p style="margin-top: 15px;">
-				<span class="simple" style="color: red;">BERSERKER</span>s are brutal fighters that go into combat with very little regard for their own safety.
+				<span class="simple" style="color: #930101;">BERSERKER</span>s are brutal fighters that go into combat with very little regard for their own safety.
 				Build your Rage with the successful use of the Attack command.  Once the Rage counter is above 5,
-				<span class="simple" style="color: red;">BERSERKER</span> gains access to a variety of buffs.  Use
+				<span class="simple" style="color: #930101;">BERSERKER</span> gains access to a variety of buffs.  Use
 				the Rage you've built to access Special Abilities through the Rage CMD:<br>
-				<span class="simple" style="color: red;">SHOULDER CHARGE</span>: Attack that deals moderate damage<br>
-				<span class="simple" style="color: red;">BLOODLUST</span>: Light attack damage, but player gains HP 2.5x the damage dealt with the attack<br>
-				<span class="simple" style="color: red;">CHAOS BURST</span>: Attack that deals substantial damage 
+				<span class="simple" style="color: #930101;">SHOULDER CHARGE</span>: Attack that deals moderate damage<br>
+				<span class="simple" style="color: #930101;">BLOODLUST</span>: Light attack damage, but player gains HP 2.5x the damage dealt with the attack<br>
+				<span class="simple" style="color: #930101;">CHAOS BURST</span>: Attack that deals substantial damage 
 			</p>
 		</div>
 		<div id="monkInstruct" class= "read instructFont characterInstruct">
 			<p style="margin-top: 15px;">
-				<span class="simple" style="color: green;">MONK</span> draws upon inner strength in battle.  Use the Harness Command to heighten your focus counter. 
-				The use of the Attack CMD also grants a smaller amount of Focus. When <span class="simple" style="color: green;">MONK</span> 
+				<span class="simple" style="color: #199101;">MONK</span> draws upon inner strength in battle.  Use the Harness Command to heighten your focus counter. 
+				The use of the Attack CMD also grants a smaller amount of Focus. When <span class="simple" style="color: #199101;">MONK</span> 
 				has achieved Max Focus, a variety of buffs are granted.   Use your Focus Points with the Arts CMD to access Special Abilites:<br>
-				<span class="simple" style="color: green;">INNER HEALING</span>: Gain random amount of HP, from a wide range<br>
-				<span class="simple" style="color: green;">RAPID PALM</span>: Combo attack with random hits, damage is based off number of hits landed<br>
-				<span class="simple" style="color: green;">AURA BOLT</span>: Attack that deals substantial damage
+				<span class="simple" style="color: #199101;">INNER HEALING</span>: Gain random amount of HP, from a wide range<br>
+				<span class="simple" style="color: #199101;">RAPID PALM</span>: Combo attack with random hits, damage is based off number of hits landed<br>
+				<span class="simple" style="color: #199101;">AURA BOLT</span>: Attack that deals substantial damage
 			</p>
 		</div>
 		<div id="wizInstruct" class= "read instructFont characterInstruct">
 			<p style="margin-top: 15px;">
-				<span class="simple" style="color: blue;">WIZARD</span> is of course, a master of magic.  While use of the Attack command may yield little damage. 
-				<span class="simple" style="color: blue;">WIZARD</span> has access to damage dealing spells with use of the Magic CMD:
-				<span class="simple" style="color: blue;">SAP</span>: Gain MP, can only be used if MP is 100 or below<br>
-				<span class="simple" style="color: blue;">ICE LANCE</span>: Attack that deals moderate damage<br>
-				<span class="simple" style="color: blue;">FORTIFY</span>: Gain random amount of HP, from a wide range<br>
-				<span class="simple" style="color: blue;">HELLFIRE</span>: Combo attack with random hits, damage is based off number of hits landed<br>
-				<span class="simple" style="color: blue;">GRAVITY WELL</span>: Attack that deals substantial damage
+				<span class="simple" style="color: #013192;">WIZARD</span> is of course, a master of magic.  While use of the Attack command may yield little damage. 
+				<span class="simple" style="color: #013192;">WIZARD</span> has access to damage dealing spells with use of the Magic CMD:
+				<span class="simple" style="color: #013192;">SAP</span>: Gain MP, can only be used if MP is 100 or below<br>
+				<span class="simple" style="color: #013192;">ICE LANCE</span>: Attack that deals moderate damage<br>
+				<span class="simple" style="color: #013192;">FORTIFY</span>: Gain random amount of HP, from a wide range<br>
+				<span class="simple" style="color: #013192;">HELLFIRE</span>: Combo attack with random hits, damage is based off number of hits landed<br>
+				<span class="simple" style="color: #013192;">GRAVITY WELL</span>: Attack that deals substantial damage
 			</p>
 		</div>
 		<div id="genInfo" class="read instructFont" style="width: 500px; margin: 0px; position: absolute; left: 10%; top: 55%; font-size: 1.3em; z-index: 0;">
 			<p>
 				Every character has access to 6 Potions.<br>Potions recover 5,000 HP on use.<br>
-				<span class="simple" style="color: red;">BERSERK</span> and <span class="simple" style="color: green;">MONK</span> are given 2 Hi-Potions.<br>Hi-Potions recover 10,000 HP on use.<br>
-				Instead of Hi-Potions, <span class="simple" style="color: blue;">WIZARD</span> is given 2 Ethers.<br>Ethers recover 300 MP on use.<br>
+				<span class="simple" style="color: #930101;">BERSERK</span> and <span class="simple" style="color: #199101;">MONK</span> are given 2 Hi-Potions.<br>Hi-Potions recover 10,000 HP on use.<br>
+				Instead of Hi-Potions, <span class="simple" style="color: #013192;">WIZARD</span> is given 2 Ethers.<br>Ethers recover 300 MP on use.<br>
 				Click a character icon to continue tutorial or click Play Game.
 			</p>
 		</div>
@@ -300,8 +323,27 @@
 		</div>
 	</section>
 	
-	<section id="battleField">
-		<canvas id="battle" style="position: absolute; left: 0px; top: 0px; z-index: -2;"></canvas>
+	<section id="characterSelect">
+		<div class="simple" style="position: absolute; left: 25%; top: 10%; font-size: 3em; z-index: 0;">
+			STEEL YOUR NERVE, CHOOSE YOUR PATH
+		</div>
+		<div id="steelAni" class="simple" style="position: absolute; left: 25%; top: 8%; font-size: 3em; z-index: -1;">
+			STEEL YOUR NERVE, CHOOSE YOUR PATH
+		</div>
+		<div style="display: inline-block; position: absolute; left: 8%; top:20%;">
+			<img src="img/BerserkerIcon.png" style="width: 400px; height: 350px; padding-right: 25px">
+			<img src="img/MonkIcon.png" style="width: 400px; height: 350px; padding-left: 25px; padding-right: 25px">
+			<img src="img/WizardIcon.png" style="width: 400px; height: 350px; padding-left: 25px;">
+		</div>
+		<div style="position: absolute; display: inline-block; left: 5%; top: 70%;">
+			<button id="bsrkButton" class="simple selectButton" style="background-color: #930101;">BERSERK</button>
+			<button id="monkButton" class="simple selectButton" style="background-color: #199101;">MONK</button>
+			<button id="wizButton" class="simple selectButton" style="background-color: #013192;">WIZARD</button>
+		</div>
 	</section>
+	
+	<canvas id="battle" style="position: absolute; left: 0px; top: 0px; z-index: 0;"></canvas>
+	<script src="battleHorizon.js"></script>
+	
 </body>
 </html>
